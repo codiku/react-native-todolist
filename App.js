@@ -89,7 +89,7 @@ export default function App() {
       <Pressable
         style={{
           position: "absolute",
-          bottom: 100,
+          bottom: 60,
           right: 20,
           backgroundColor: "#C2DAFF",
           width: 150,
@@ -125,11 +125,6 @@ export default function App() {
           </View>
         </View>
         {buttonAdd()}
-        <TabBottomMenu
-          todoList={todoList}
-          onPress={setSelectedTabName}
-          selectedTabName={selectedTabName}
-        />
 
         <Dialog.Container
           visible={isDialogVisible}
@@ -143,6 +138,11 @@ export default function App() {
           <Dialog.Button label="Créer" onPress={createTodo} />
         </Dialog.Container>
       </SafeAreaView>
+      <TabBottomMenu
+        todoList={todoList}
+        onPress={setSelectedTabName}
+        selectedTabName={selectedTabName}
+      />
     </SafeAreaProvider>
   );
 }
