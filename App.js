@@ -4,7 +4,6 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { s } from "./App.style";
 import { CardTodo } from "./components/CardTodo/CardTodo";
 import { Header } from "./components/Header/Header";
-
 export default function App() {
   const [todoList, setTodoList] = useState([
     { id: 1, title: "Sortir le chien", isCompleted: true },
@@ -16,7 +15,6 @@ export default function App() {
     { id: 7, title: "Faire les courses", isCompleted: true },
     { id: 8, title: "Appeler le vétérinaire", isCompleted: true },
   ]);
-
   function updateTodo(todo) {
     const updatedTodo = {
       ...todo,
@@ -29,6 +27,7 @@ export default function App() {
 
     const updatedTodoList = [...todoList];
     updatedTodoList[indexToUpdate] = updatedTodo;
+    setTodoList(updatedTodoList);
   }
 
   function renderTodoList() {
@@ -50,9 +49,7 @@ export default function App() {
           </View>
         </SafeAreaView>
       </SafeAreaProvider>
-      <View style={s.footer}>
-        <Text>Footer</Text>
-      </View>
+      <View style={s.footer}></View>
     </>
   );
 }
