@@ -4,7 +4,9 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { s } from "./App.style";
 import { CardTodo } from "./components/CardTodo/CardTodo";
 import { Header } from "./components/Header/Header";
+import { TabBottomMenu } from "./components/TabBottomMenu/TabBottomMenu";
 export default function App() {
+  const [selectedTabName, setSelectedTabName] = useState("all");
   const [todoList, setTodoList] = useState([
     { id: 1, title: "Sortir le chien", isCompleted: true },
     { id: 2, title: "Aller chez le garagiste", isCompleted: false },
@@ -49,7 +51,10 @@ export default function App() {
           </View>
         </SafeAreaView>
       </SafeAreaProvider>
-      <View style={s.footer}></View>
+      <TabBottomMenu
+        onPress={setSelectedTabName}
+        selectedTabName={selectedTabName}
+      />
     </>
   );
 }
