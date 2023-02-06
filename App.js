@@ -18,6 +18,17 @@ export default function App() {
     { id: 7, title: "Faire les courses", isCompleted: true },
     { id: 8, title: "Appeler le vétérinaire", isCompleted: true },
   ]);
+
+  function getFilteredList() {
+    switch (selectedTabName) {
+      case "all":
+        return todoList;
+      case "inProgress":
+        return todoList.filter((todo) => !todo.isCompleted);
+      case "done":
+        return todoList.filter((todo) => todo.isCompleted);
+    }
+  }
   function updateTodo(todo) {
     const updatedTodo = {
       ...todo,
@@ -34,7 +45,7 @@ export default function App() {
   }
 
   function renderTodoList() {
-    return todoList.map((todo) => (
+    return getFilteredList().map((todo) => (
       <View style={s.cardItem} key={todo.id}>
         <CardTodo onPress={updateTodo} todo={todo} />
       </View>
@@ -53,6 +64,7 @@ export default function App() {
         </SafeAreaView>
       </SafeAreaProvider>
       <TabBottomMenu
+        todoList={todoList}
         onPress={setSelectedTabName}
         selectedTabName={selectedTabName}
       />
