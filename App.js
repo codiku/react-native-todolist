@@ -11,8 +11,7 @@ import uuid from "react-native-uuid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let isFirstRender = true;
-let shouldSave = false;
-
+let isLoadUpdate = false;
 export default function App() {
   const [selectedTabName, setSelectedTabName] = useState("all");
   const [todoList, setTodoList] = useState([]);
@@ -24,37 +23,39 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!isFirstRender && shouldSave) {
-      saveTodoList();
-      shouldSave = false;
+    if (isLoadUpdate) {
+      isLoadUpdate = false;
     } else {
-      isFirstRender = false;
+      if (!isFirstRender) {
+        saveTodoList();
+      } else {
+        isFirstRender = false;
+      }
     }
   }, [todoList]);
-
   async function saveTodoList() {
-    console.log("Save");
+    console.log("SAVE");
     try {
-      await AsyncStorage.setItem("todoList", JSON.stringify(todoList));
+      await AsyncStorage.setItem("@todolist", JSON.stringify(todoList));
     } catch (err) {
-      alert("Erreur" + err);
+      alert("Erreur " + err);
     }
   }
 
   async function loadTodoList() {
-    console.log("Load");
-    let loadedList;
+    console.log("LOAD");
     try {
-      loadedList = await AsyncStorage.getItem("todoList");
-      if (loadedList !== null) {
-        loadedList = JSON.parse(loadedList);
+      const stringifiedTodoList = await AsyncStorage.getItem("@todolist");
+      if (stringifiedTodoList !== null) {
+        const parsedTodoList = JSON.parse(stringifiedTodoList);
+        isLoadUpdate = true;
+        setTodoList(parsedTodoList);
       }
     } catch (err) {
-      alert("Erreur lors du chargement des tâches : " + err);
-      loadedList = [];
+      alert("Erreur " + err);
     }
-    setTodoList(loadedList);
   }
+
   function getFilteredList() {
     switch (selectedTabName) {
       case "all":
