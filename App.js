@@ -4,6 +4,7 @@ import { s } from "./App.style";
 import { Header } from "./components/Header/Header";
 import { CardTodo } from "./components/CardTodo/CardTodo";
 import { useState } from "react";
+import { TabBottomMenu } from "./components/TabBottomMenu/TabBottomMenu";
 
 export default function App() {
   const [todoList, setTodoList] = useState([
@@ -17,6 +18,7 @@ export default function App() {
     { id: 8, title: "Go to the dentist", isCompleted: false },
     { id: 9, title: "Learn React Native", isCompleted: false },
   ]);
+  const [selectedTabName, setSelectedTabName] = useState("inProgress");
 
   function renderTodoList() {
     return todoList.map((todo) => (
@@ -51,7 +53,10 @@ export default function App() {
         </SafeAreaView>
       </SafeAreaProvider>
       <View style={s.footer}>
-        <Text>Footer</Text>
+        <TabBottomMenu
+          onPress={setSelectedTabName}
+          selectedTabName={selectedTabName}
+        />
       </View>
     </>
   );
