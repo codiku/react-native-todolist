@@ -21,9 +21,22 @@ export default function App() {
   function renderTodoList() {
     return todoList.map((todo) => (
       <View key={todo.id} style={s.cardItem}>
-        <CardTodo todo={todo} />
+        <CardTodo onPress={updateTodo} todo={todo} />
       </View>
     ));
+  }
+
+  function updateTodo(todo) {
+    const updatedTodo = {
+      ...todo,
+      isCompleted: !todo.isCompleted,
+    };
+    const updatedTodoList = [...todoList];
+    const indexToUpdate = updatedTodoList.findIndex(
+      (t) => t.id === updatedTodo.id
+    );
+    updatedTodoList[indexToUpdate] = updatedTodo;
+    setTodoList(updatedTodoList);
   }
   return (
     <>
