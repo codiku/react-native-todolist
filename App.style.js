@@ -8,5 +8,5 @@ export const s = StyleSheet.create({
   },
   header: { flex: 1 },
   body: { flex: 5 },
-  footer: { height: 70 },
+  footer: { backgroundColor: "white", height: 70 },
 });
