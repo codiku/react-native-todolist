@@ -8,10 +8,6 @@ import { TabBottomMenu } from "./components/TabBottomMenu/TabBottomMenu";
 import { ButtonAdd } from "./components/ButtonAdd/ButtonAdd";
 import Dialog from "react-native-dialog";
 import uuid from "react-native-uuid";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-let isFirstRender = true;
-let isLoadUpdate = false;
 
 export default function App() {
   const [todoList, setTodoList] = useState([]);
@@ -19,42 +15,6 @@ export default function App() {
   const [isAddDialogDisplayed, setIsAddDialogDisplayed] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  useEffect(() => {
-    loadTodoList();
-  }, []);
-
-  useEffect(() => {
-    if (!isLoadUpdate) {
-      if (!isFirstRender) {
-        saveTodoList();
-      } else {
-        isFirstRender = false;
-      }
-    } else {
-      isLoadUpdate = false;
-    }
-  }, [todoList]);
-
-  async function loadTodoList() {
-    console.log("LOAD");
-    try {
-      const todoListString = await AsyncStorage.getItem("@todoList");
-      const parsedTodoList = JSON.parse(todoListString);
-      isLoadUpdate = true;
-      setTodoList(parsedTodoList);
-    } catch (err) {
-      alert(err);
-    }
-  }
-
-  async function saveTodoList() {
-    console.log("SAVE");
-    try {
-      await AsyncStorage.setItem("@todoList", JSON.stringify(todoList));
-    } catch (err) {
-      alert(err);
-    }
-  }
   function getFilteredList() {
     switch (selectedTabName) {
       case "all":
