@@ -3,7 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { s } from "./App.style";
 import { Header } from "./components/Header/Header";
 import { CardTodo } from "./components/CardTodo/CardTodo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TabBottomMenu } from "./components/TabBottomMenu/TabBottomMenu";
 import { ButtonAdd } from "./components/ButtonAdd/ButtonAdd";
 import Dialog from "react-native-dialog";
@@ -18,7 +18,7 @@ export default function App() {
   const [selectedTabName, setSelectedTabName] = useState("all");
   const [isAddDialogDisplayed, setIsAddDialogDisplayed] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
+  const scrollViewRef = useRef();
   useEffect(() => {
     loadTodoList();
   }, []);
@@ -36,19 +36,17 @@ export default function App() {
   }, [todoList]);
 
   async function loadTodoList() {
-    console.log("LOAD");
     try {
       const todoListString = await AsyncStorage.getItem("@todoList");
       const parsedTodoList = JSON.parse(todoListString);
       isLoadUpdate = true;
-      setTodoList(parsedTodoList);
+      setTodoList(parsedTodoList || []);
     } catch (err) {
       alert(err);
     }
   }
 
   async function saveTodoList() {
-    console.log("SAVE");
     try {
       await AsyncStorage.setItem("@todoList", JSON.stringify(todoList));
     } catch (err) {
@@ -64,6 +62,7 @@ export default function App() {
       case "done":
         return todoList.filter((todo) => todo.isCompleted);
     }
+    return [];
   }
 
   function deleteTodo(todoToDelete) {
@@ -109,6 +108,9 @@ export default function App() {
     setTodoList([...todoList, newTodo]);
     setIsAddDialogDisplayed(false);
     setInputValue("");
+    setTimeout(() => {
+      scrollViewRef.current.scrollToEnd();
+    }, 300);
   }
 
   function renderAddDialog() {
@@ -145,7 +147,7 @@ export default function App() {
             <Header />
           </View>
           <View style={s.body}>
-            <ScrollView>{renderTodoList()}</ScrollView>
+            <ScrollView ref={scrollViewRef}>{renderTodoList()}</ScrollView>
           </View>
           <ButtonAdd onPress={() => setIsAddDialogDisplayed(true)} />
         </SafeAreaView>
